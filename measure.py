@@ -20,7 +20,8 @@ def create_table_if_not_exists(conn: sqlite3.Connection) -> None:
             unix_timestamp INT,
             response_time_ms REAL,
             payload_bytes INT,
-            is_up BOOLEAN
+            is_up BOOLEAN,
+            exported BOOLEAN
         )
     ''')
     conn.commit()
@@ -36,9 +37,9 @@ def insert_result_to_db(
 ) -> None:
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO response_times (timestamp, unix_timestamp, response_time_ms, payload_bytes, is_up)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (timestamp, unix_timestamp, response_time_ms, payload_bytes, is_up))
+        INSERT INTO response_times (timestamp, unix_timestamp, response_time_ms, payload_bytes, is_up, exported)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (timestamp, unix_timestamp, response_time_ms, payload_bytes, is_up, False))
     conn.commit()
 
 
