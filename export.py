@@ -1,6 +1,10 @@
 import csv
 import sqlite3
 import datetime
+import shutil
+from pathlib import Path
+
+from utils import load_settings
 
 
 def export_unexported_data(conn: sqlite3.Connection, filename: str) -> None:
@@ -20,8 +24,18 @@ def export_unexported_data(conn: sqlite3.Connection, filename: str) -> None:
     conn.commit()
     
 
+def copy_file_to_destination(filename: str, destination_folder: str) -> None:
+    source_file = Path.cwd() / filename
+    destination_file = Path(destination_folder) / filename
+    shutil.copy(str(source_file), str(destination_file))
+
+
 if __name__ == "__main__":
+    settings = load_settings('settings.json')
+    destination_folder = settings.get('destination_folder')
     conn = sqlite3.connect('response_times.db')
     current_date = datetime.datetime.now().strftime('%Y-%m-%d')
     filename = f'measurements_{current_date}.csv'
     export_unexported_data(conn, filename)
+    if destination_folder:
+        copy_file_to_destination(filename, destination_folder)
