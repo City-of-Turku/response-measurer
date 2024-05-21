@@ -4,5 +4,6 @@
     "table": "",
     "username": "",
     "password": "",
-    "driver": "{SQL Server}"
+    "driver": "{SQL Server}",
+    "destination_folder": ""
 }

@@ -1,14 +1,9 @@
 import pyodbc
 import time
 import sqlite3
-import json
 import sys
 
-
-def load_settings(file_path: str) -> dict:
-    with open(file_path, 'r') as file:
-        settings = json.load(file)
-    return settings
+from utils import load_settings
 
 
 def create_table_if_not_exists(conn: sqlite3.Connection) -> None:
