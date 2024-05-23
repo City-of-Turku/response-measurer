@@ -99,9 +99,14 @@ def create_weekly_reports(c: sqlite3.Cursor, destination_folder: str) -> None:
     
 
 def copy_file_to_destination(file_path: str, destination_folder: str) -> None:
-    source_file = Path(file_path)
-    destination_file = Path(destination_folder) / source_file.name
-    shutil.copy(str(source_file), str(destination_file))
+    try:
+        source_file = Path(file_path)
+        destination_file = Path(destination_folder) / source_file.name
+        shutil.copy(str(source_file), str(destination_file))
+    except (FileNotFoundError, PermissionError) as e:
+        print(f"Error: {e}")
+    except OSError as e:
+        print(f"Error occurred while copying file: {e}")
 
 
 if __name__ == "__main__":
