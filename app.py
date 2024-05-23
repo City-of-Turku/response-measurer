@@ -1,8 +1,15 @@
 import time
+import sched
+
 from measure import main
 
 
 if __name__ == "__main__":
-    while True:
+    scheduler = sched.scheduler(time.time, time.sleep)
+
+    def run_main(scheduler):
         main()
-        time.sleep(60)
+        scheduler.enter(60, 1, run_main, (scheduler,))
+
+    run_main(scheduler)
+    scheduler.run()
