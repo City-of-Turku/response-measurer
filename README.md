@@ -26,7 +26,7 @@ Create file `settings.json` based on `example_settings.json`. Each setting expla
 - `database`: the database name you are targeting.
 - `table`: the database table you are targeting for measurements.
 - `driver`: `pyodbc` uses this to connect to the SQL db. Use `"{SQL Server}"` unless you have some specific needs for other drivers.
-- `destination_folder`: the folder `export.py` makes additional copies of exported report files into. Leave empty `""` if you don't want additional copies.
+- `destination_folder`: the folder `export.py` makes additional copies of exported report files into. Leave empty `""` if you don't want additional copies. Note that folder path needs to use "/" format i.e. this/is/my/path.
 - `network_test_addr`: URL to check whether network is working or not when making measurements. Leave empty `""` if you don't want this additional network test.
 
 ## Running the app
