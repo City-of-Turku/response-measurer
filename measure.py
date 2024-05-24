@@ -2,6 +2,7 @@ import pyodbc
 import time
 import sqlite3
 import sys
+import requests
 
 from utils import load_settings
 
@@ -69,13 +70,33 @@ def connect_and_query(settings: dict) -> int:
         return 0
     
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
 
-def measure_and_store_response_time(settings: dict, conn: sqlite3.Connection):
+def is_network_connection_working(network_test_addr: str) -> bool:
+    if not network_test_addr:
+        return True
+    try:
+        print('Testing for network issues...')
+        requests.get('https://www.turku.fi', timeout=30)
+        print('Network looks ok')
+        return True
+    except Exception as e:
+        print('Network error:', e)
+        return False
+
+
+def measure_and_store_response_time(settings: dict, conn: sqlite3.Connection) -> None:
     start_time = time.time()
     result_bytes = connect_and_query(settings)
+
+    if not result_bytes and not is_network_connection_working(settings.get('network_test_addr')):
+        print("Skipping measurement storing due to network issue.")
+        return
+
     end_time = time.time()
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')  # Current timestamp in the format 'YYYY-MM-DD HH:MM:SS'
     timestamp_struct = time.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
