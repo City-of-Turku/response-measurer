@@ -8,6 +8,8 @@ The main measuring script makes simple database queries to target database every
 
 The export script handles exporting weekly reports. The script works by getting all unexported full 7 day week periods worth of measuring data and creating two report files of each full unexported week. The first report type is a raw row data csv file and the second type is a total uptime summary txt file. The reports are created under "reports" folder. Additionally copies of these reports are made to desired folder location when this folder location is given in the settings file.
 
+A test export can be made with script test_export.py. This will create a file "test_report.csv" with a single data row.
+
 ## Installing
 
 To use the app first init and activate venv e.g. in Windows:
