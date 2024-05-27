@@ -163,3 +163,4 @@ settings.json
 response_times.db
 *.csv
 reports/
+.python-version

@@ -5,7 +5,7 @@ import shutil
 from pathlib import Path
 import os
 
-from utils import load_settings
+from utils import load_settings, logger
 
 
 def get_first_unexported_timestamp(c: sqlite3.Cursor):
@@ -45,7 +45,7 @@ def generate_csv_report(week_data: list, end_date: str, destination_folder: str)
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(['id', 'timestamp', 'response_time_ms', 'payload_bytes', 'is_up'])
         csvwriter.writerows(week_data)
-    print(f'Report generated: {filename}')
+    logger.info(f'Report generated: {filename}')
     if destination_folder:
         copy_file_to_destination(file_path, destination_folder)
 
@@ -63,7 +63,7 @@ def generate_txt_report(start_date: str, end_date: str, week_data: list, destina
         txtfile.write(f'End Date: {end_date}\n')
         txtfile.write(f'Total time of operation: {total_uptime} (Minutes / w)\n')
         txtfile.write(f'Total time of unavailability: {total_downtime} (Minutes / w)\n')
-    print(f'Uptime report generated: {filename}')
+    logger.info(f'Uptime report generated: {filename}')
     if destination_folder:
         copy_file_to_destination(file_path, destination_folder)
 
@@ -71,7 +71,7 @@ def generate_txt_report(start_date: str, end_date: str, week_data: list, destina
 def create_weekly_reports(c: sqlite3.Cursor, destination_folder: str) -> None:
     first_unexported_timestamp = get_first_unexported_timestamp(c)
     if not first_unexported_timestamp:
-        print("No unexported rows found.")
+        logger.info("No unexported rows found.")
         return
     
     week_number = 1
@@ -82,7 +82,7 @@ def create_weekly_reports(c: sqlite3.Cursor, destination_folder: str) -> None:
         
         start_date = datetime.strptime(first_unexported_timestamp, '%Y-%m-%d %H:%M:%S').replace(hour=0, minute=0, second=0)
         if (datetime.now() - start_date).days < 7:
-            print(f"Week starting {start_date} does not span a full 7 days. Skipping.")
+            logger.info(f"Week starting {start_date} does not span a full 7 days. Skipping.")
             break
 
         end_date = start_date + timedelta(days=6, hours=23, minutes=59)
@@ -104,9 +104,9 @@ def copy_file_to_destination(file_path: str, destination_folder: str) -> None:
         destination_file = Path(destination_folder) / source_file.name
         shutil.copy(str(source_file), str(destination_file))
     except (FileNotFoundError, PermissionError) as e:
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
     except OSError as e:
-        print(f"Error occurred while copying file: {e}")
+        logger.error(f"Error occurred while copying file: {e}")
 
 
 if __name__ == "__main__":

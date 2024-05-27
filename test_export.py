@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 
 from export import copy_file_to_destination
-from utils import load_settings
+from utils import load_settings, logger
 
 def handle_export(c, destination_folder):
     c.execute('SELECT * FROM response_times')
@@ -31,15 +31,15 @@ def handle_export(c, destination_folder):
             csvwriter.writerow(['id', 'timestamp', 'response_time_ms', 'payload_bytes', 'is_up'])
             csvwriter.writerow(row_data)
 
-        print('Test export CSV created successfully.')
+        logger.info('Test export CSV created successfully.')
         if destination_folder:
-            print(f'Attempting to copy test export to {destination_folder}.')
+            logger.info(f'Attempting to copy test export to {destination_folder}.')
             copy_file_to_destination(file_path, destination_folder)
             
         else:
-            print('No destination folder specified in settings. Skipping copying.')
+            logger.info('No destination folder specified in settings. Skipping copying.')
     else:
-        print('No rows found.')
+        logger.info('No rows found.')
 
 
 if __name__ == "__main__":
@@ -48,6 +48,4 @@ if __name__ == "__main__":
     conn = sqlite3.connect('response_times.db')
     c = conn.cursor()
     handle_export(c, destination_folder)
-    print('Test done.')
-    print('Press any key to exit...')
-    input()
+    input('Test done.\nPress any key to exit...')
