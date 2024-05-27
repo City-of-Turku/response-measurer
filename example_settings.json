@@ -3,7 +3,6 @@
     "database": "",
     "table": "",
     "username": "",
-    "password": "",
     "driver": "{SQL Server}",
     "destination_folder": "",
     "network_test_addr": ""

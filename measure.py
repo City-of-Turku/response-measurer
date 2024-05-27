@@ -3,6 +3,7 @@ import time
 import sqlite3
 import requests
 import pickle
+import keyring
 
 from driver import Driver
 from utils import load_settings, logger
@@ -42,7 +43,7 @@ def insert_result_to_db(
 
 def connect_and_query(settings: dict) -> int:
     username = settings.get('username')
-    password = settings.get('password')
+    password = keyring.get_password('response-measurer', username)
     server = settings.get('server')
     port = settings.get('port', 1433)
     database = settings.get('database')
