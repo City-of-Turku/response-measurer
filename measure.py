@@ -3,6 +3,7 @@ import time
 import sqlite3
 import sys
 import requests
+import keyring
 
 from utils import load_settings
 
@@ -41,7 +42,7 @@ def insert_result_to_db(
 
 def connect_and_query(settings: dict) -> int:
     username = settings.get('username')
-    password = settings.get('password')
+    password = keyring.get_password('response-measurer', username)
     server = settings.get('server')
     database = settings.get('database')
     driver = settings.get('driver')
