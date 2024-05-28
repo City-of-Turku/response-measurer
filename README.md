@@ -24,7 +24,8 @@ pip install -r requirements.txt
 ```
 
 Create file `settings.json` based on `example_settings.json`. Each setting explained:
-- `server` the address for your target database's server.
+- `server`: The address (hostname or IP address) of the target database server.
+- `port`: The port number through which the target database server is accessed.
 - `database`: the database name you are targeting.
 - `table`: the database table you are targeting for measurements.
 - `username`: the username for using the target db. Leave empty `""` if you don't need username and password for connection.
